@@ -19,7 +19,6 @@ class Student(nnx.Module):
         self.input_dim = input_dim
         self.layerwidth = layer_width
         self.activation = activationfn
-
         self.first_layer = nnx.Linear(self.input_dim, self.layerwidth, rngs=rng)
         self.hidden_layer = nnx.Linear(
             self.layerwidth, 1, rngs=rng
