@@ -32,12 +32,10 @@ class Student(nnx.Module):
 
 
 class Teacher(nnx.Module):
-    def __init__(self, input_dim, layer_width, threshold_value, rng):
+    def __init__(self, input_dim, layer_width, rng):
         super().__init__()
         self.input_dim = input_dim
         self.layerwidth = layer_width
-        self.threshold_value = threshold_value
-
         self.first_layer = nnx.Linear(
             self.input_dim,
             self.layerwidth,
@@ -52,9 +50,13 @@ class Teacher(nnx.Module):
             bias_init=teacher_initializer,
             rngs=rng,
         )  # Acumulo el output de la capa lineal en una sola neurona
+        # S = (self.input_dim - jnp.sum(self.first_layer.kernel.value, axis=0) + self.first_layer.bias.value) / 2
+        # self.threshold_value = 0.75 * (self.input_dim + 1) - S # Beta sacado del repo del paper
+        
+        self.activation = lambda x: 2.0 * (x > (0.75 * (self.input_dim + 1) - (self.input_dim - jnp.sum(self.first_layer.kernel.value, axis=0) + self.first_layer.bias.value) / 2)) - 1.0
 
     def __call__(self, x):
         x = self.first_layer(x)
-        x = threshold(x, self.threshold_value)
+        x = self.activation(x)#threshold(x, self.threshold_value)
         x = self.hidden_layer(x)
         return x

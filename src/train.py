@@ -31,28 +31,24 @@ def train_step(model: Student, teacher: Teacher, optimizer: nnx.Optimizer, metri
     teacher_values = teacher(x_batch)
     grad_loss_fn = nnx.value_and_grad(mse_loss, has_aux=True)
     (loss, model_output), grads = grad_loss_fn(model, x_batch, teacher_values)
-    #metrics.update(loss=loss, model_output=model_output, teacher_output=teacher_values)
+    metrics.update(loss=loss)
     optimizer.update(grads)
     return None
 
-@nnx.jit
 def eval_step(model: Student, teacher: Teacher, metrics: nnx.MultiMetric, x_batch):
     teacher_values = teacher(x_batch)
     loss, model_output = mse_loss(model, x_batch, teacher_values)
     metrics.update(loss=loss, model_output=model_output, teacher_output=teacher_values)
     return None
 
-def train_model(model: Student, teacher: Teacher, x_data, optimizer, n_epochs, batch_size = 10, learning_rate = 0.005, momentum = 0.9):
+def train_model(model: Student, teacher: Teacher, x_data, n_epochs, batch_size = 10, learning_rate = 0.005, momentum = 0.9):
     x_batches = batch_x_data(x_data, batch_size)
     metrics_history = {
     'train_loss': [],
-    'train_accuracy': [],
     'test_loss': [],
-    'test_accuracy': [],
     }
     
     metrics = nnx.MultiMetric(
-    accuracy=nnx.metrics.Accuracy(),
     loss=nnx.metrics.Average('loss'),
     )
 
@@ -60,4 +56,4 @@ def train_model(model: Student, teacher: Teacher, x_data, optimizer, n_epochs, b
 
     for epoch in trange(n_epochs):
         train_step(model, teacher, optimizer, metrics, x_batches[epoch % len(x_batches)])
-    return model
+    return
