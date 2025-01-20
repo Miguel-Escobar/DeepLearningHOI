@@ -35,25 +35,33 @@ def train_step(model: Student, teacher: Teacher, optimizer: nnx.Optimizer, metri
     optimizer.update(grads)
     return None
 
-def eval_step(model: Student, teacher: Teacher, metrics: nnx.MultiMetric, x_batch):
-    teacher_values = teacher(x_batch)
-    loss, model_output = mse_loss(model, x_batch, teacher_values)
-    metrics.update(loss=loss, model_output=model_output, teacher_output=teacher_values)
+def eval_step(model: Student, teacher: Teacher, metrics: nnx.MultiMetric, x_test_data):
+    teacher_values = teacher(x_test_data)
+    loss, model_output = mse_loss(model, x_test_data, teacher_values)
+    metrics.update(loss=loss)
     return None
 
-def train_model(model: Student, teacher: Teacher, x_data, n_epochs, batch_size = 10, learning_rate = 0.005, momentum = 0.9):
-    x_batches = batch_x_data(x_data, batch_size)
+def train_model(model: Student, teacher: Teacher, x_data, x_data_switch_every, n_epochs, batch_size = 10, learning_rate = 0.005, momentum = 0.9):
+    x_batches = batch_x_data(x_data, batch_size)    
     metrics_history = {
     'train_loss': [],
     'test_loss': [],
     }
-    
+    n_batches = len(x_batches)
     metrics = nnx.MultiMetric(
     loss=nnx.metrics.Average('loss'),
     )
 
     optimizer = nnx.Optimizer(model, optax.adamw(learning_rate, momentum))
 
-    for epoch in trange(n_epochs):
-        train_step(model, teacher, optimizer, metrics, x_batches[epoch % len(x_batches)])
-    return
+    for step in trange(n_epochs):
+        train_step(model, teacher, optimizer, metrics, x_batches[step % n_batches])
+        if (step * batch_size) % x_data_switch_every == 0: # Entramos en un caso de evaluación del modelo, que todavía no sé hacer legit la verdad
+            # current_datapoints_start = (step*batch_size) % n_data_points
+            # current_datapoints_end = current_datapoints_start + x_data_switch_every
+            # eval_step(model, teacher, metrics, x_data[current_datapoints_start:current_datapoints_end])
+            for metric, value in metrics.compute().items():  # Compute the metrics.
+                metrics_history[f'train_{metric}'].append(value)  # Record the metrics.
+            metrics.reset()  # Reset the metrics for the test set.
+
+    return metrics_history
