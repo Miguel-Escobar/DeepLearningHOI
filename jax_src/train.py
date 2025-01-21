@@ -1,4 +1,4 @@
-from src.model import Student, Teacher
+from model import Student, Teacher
 import jax, optax, jax.numpy as jnp
 from flax import nnx
 from tqdm import tqdm, trange
