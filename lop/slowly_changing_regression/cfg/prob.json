@@ -5,7 +5,7 @@
   "gen_prob_data": true,
   "num_runs":  100,
   "num_inputs": 20,
-  "num_data_points": 1e7,
+  "num_data_points": 1e6,
   "data_dir": "",
   "env_data_dir": "data/env_data/scr/",
   "flip_after": 10000,

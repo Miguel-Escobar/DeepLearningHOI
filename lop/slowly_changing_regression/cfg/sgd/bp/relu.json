@@ -12,6 +12,8 @@
   "num_target_features": 100,
   "num_flipping_bits": 15,
   "to_log_features": false,
+  "to_log_params": true,
+  "save_every": 1000,
   "beta": 0.7,
 
   "_comment_2_": "Learner parameters",
@@ -19,7 +21,7 @@
   "num_features": 5,
   "hidden_activation": "relu",
   "opt": "sgd",
-  "step_size": [0.01, 0.003, 0.001],
+  "step_size": 0.01,
   "replacement_rate": 0,
   "decay_rate": 0
 }

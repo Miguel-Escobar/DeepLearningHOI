@@ -5,6 +5,11 @@ import argparse
 import subprocess
 from lop.utils.miscellaneous import *
 
+debug = False
+
+if debug:
+    import pprint
+
 def main(arguments):
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -25,15 +30,25 @@ def main(arguments):
 
     # generate_env_data data for all the runs
     if params['gen_prob_data']:
+        if debug:
+            print("Generando datos del problema")
+            # print("Directorio de la data del problema: " + params['env_data_dir']) # debug
+            # print("Número de ejecuciones: " + str(params['num_runs'])) # debug
+            pprint.pprint(params) # debug
+        assert params['env_data_dir'] != '' and params['env_data_dir'] != "/", "No se ha especificado un directorio para los datos del problema o estas a punto de borrar todo el disco. No borres todo el disco." # Esto en verdad debiera ser más seguro, pero no sé cómo.
+
         bash_command = "rm --force " + params['env_data_dir'] + '*'
         subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
         bash_command = "mkdir -p " + params['env_data_dir']
         subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        # make a directory for env temp cfg files
+        # make a directory for env temp cfg files and ensure it is empty
         bash_command = "mkdir -p env_temp_cfg/"
+        subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+        bash_command = "rm -rf env_temp_cfg/*"
         subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
 
         for idx in tqdm(range(params['num_runs'])):
+            if debug: print("Generando config para la teacher data de la run " + str(idx))
             new_cfg_file = 'env_temp_cfg/'+str(idx)+'.json'
             new_params = copy.deepcopy(params)
             new_params['env_file'] = new_params['env_data_dir'] + str(idx)
@@ -47,7 +62,7 @@ def main(arguments):
             with open(new_cfg_file, 'w+') as f:
                 json.dump(new_params, f)
         return
-
+    if debug: print("No generando datos del problema")
     bash_command = "rm -r --force " + params['data_dir']
     subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     bash_command = "mkdir " + params['data_dir']
@@ -66,6 +81,7 @@ def main(arguments):
         """
             Make the data directory
         """
+        print("Directorio de la data: " + new_params['data_dir']) # debug
         bash_command = "mkdir -p " + new_params['data_dir']
         subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
 

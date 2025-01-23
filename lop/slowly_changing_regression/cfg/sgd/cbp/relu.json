@@ -3,7 +3,7 @@
 
   "_comment_1_": "List of problem/experiment parameters",
   "gen_prob_data": false,
-  "num_runs":  1,
+  "num_runs":  100,
   "num_inputs": 20,
   "num_data_points": 1e6,
   "data_dir": "data/sgd/cbp/relu/",
@@ -12,6 +12,8 @@
   "num_target_features": 100,
   "num_flipping_bits": 15,
   "to_log_features": false,
+  "to_log_params": true,
+  "save_every": 1000,
   "beta": 0.7,
 
   "_comment_2_": "Learner parameters",
@@ -21,7 +23,7 @@
   "util_type": "adaptable_contribution",
   "opt": "sgd",
   "step_size": 0.01,
-  "replacement_rate": [1e-6, 1e-5, 1e-4, 1e-3, 1e-2],
+  "replacement_rate": 1e-6,
   "decay_rate": 0.99,
   "maturity_threshold": 100
 }

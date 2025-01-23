@@ -1,3 +1,9 @@
+# fix horrible
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+
 import sys
 import json
 import pickle
@@ -8,14 +14,14 @@ from lop.algos.bp import Backprop
 from lop.algos.cbp import ContinualBackprop
 from lop.utils.miscellaneous import *
 
-
-def expr(params: {}):
+def expr(params: dict):
     agent_type = params['agent']
     env_file = params['env_file']
     num_data_points = int(params['num_data_points'])
     to_log = False
     to_log_grad = False
     to_log_activation = False
+    to_log_params = False
     beta_1 = 0.9
     beta_2 = 0.999
     weight_decay = 0.0
@@ -27,6 +33,8 @@ def expr(params: {}):
         to_log_grad = params['to_log_grad']
     if 'to_log_activation' in params.keys():
         to_log_activation = params['to_log_activation']
+    if 'to_log_params' in params.keys():
+        to_log_params = params['to_log_params']
     if 'beta_1' in params.keys():
         beta_1 = params['beta_1']
     if 'beta_2' in params.keys():
@@ -98,6 +106,8 @@ def expr(params: {}):
     if to_log: weight_mag = torch.zeros((num_data_points, 2), dtype=torch.float)
     if to_log_grad: grad_mag = torch.zeros((num_data_points, 2), dtype=torch.float)
     if to_log_activation: activation = torch.zeros((num_data_points, ), dtype=torch.float)
+    if to_log_params: params, save_every = ([], params["save_every"]) # quiero que sea una lista para no calentarme demasiado la cabeza.
+
     for i in tqdm(range(num_data_points)):
         x, y = inputs[i: i+1], outputs[i: i+1]
         err = learner.learn(x=x, target=y)
@@ -112,6 +122,8 @@ def expr(params: {}):
                 activation[i] = (learner.previous_features[0] == 0).float().mean()
             if hidden_activation == 'tanh':
                 activation[i] = (learner.previous_features[0].abs() > 0.9).float().mean()
+        if to_log_params and i % save_every == 1:
+            params.append((learner.net.layers[0].weight.data, learner.net.layers[0].bias.data, learner.net.layers[2].weight.data))
         errs[i] = err
 
     data_to_save = {
@@ -123,6 +135,8 @@ def expr(params: {}):
         data_to_save['grad_mag'] = grad_mag.numpy()
     if to_log_activation:
         data_to_save['activation'] = activation.numpy()
+    if to_log_params:
+        data_to_save['params'] = params
     return data_to_save
 
 
