@@ -1,3 +1,9 @@
+# fix horrible
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+
 import sys
 import json
 import copy
@@ -65,7 +71,7 @@ def main(arguments):
     if debug: print("No generando datos del problema")
     bash_command = "rm -r --force " + params['data_dir']
     subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    bash_command = "mkdir " + params['data_dir']
+    bash_command = "mkdir -p " + params['data_dir']
     subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
 
     """
@@ -81,13 +87,13 @@ def main(arguments):
         """
             Make the data directory
         """
-        print("Directorio de la data: " + new_params['data_dir']) # debug
+        if debug: print("Directorio de la data: " + new_params['data_dir']) # debug
         bash_command = "mkdir -p " + new_params['data_dir']
         subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
 
         for idx in tqdm(range(params['num_runs'])):
             new_params['data_file'] = new_params['data_dir'] + str(idx)
-            new_params['env_file'] = new_params['env_data_dir'] + str(idx)
+            new_params['env_file'] = new_params['env_data_dir'] + "0"#str(idx)
 
             """
                 write data in config files

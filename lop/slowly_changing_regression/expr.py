@@ -123,7 +123,7 @@ def expr(params: dict):
             if hidden_activation == 'tanh':
                 activation[i] = (learner.previous_features[0].abs() > 0.9).float().mean()
         if to_log_params and i % save_every == 1:
-            params.append((learner.net.layers[0].weight.data, learner.net.layers[0].bias.data, learner.net.layers[2].weight.data))
+            params.append((learner.net.layers[0].weight.clone().detach(), learner.net.layers[0].bias.clone().detach(), learner.net.layers[2].weight.clone().detach()))
         errs[i] = err
 
     data_to_save = {

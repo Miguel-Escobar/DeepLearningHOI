@@ -1,3 +1,0 @@
-  0%|          | 0/101 [00:00<?, ?it/s]/Users/migue/Documents/GitHub/DeepLearningHOI/lop/utils/ltu.py:9: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
-  ctx.save_for_backward(inp, torch.tensor(tau))
- 15%|█▍        | 15/101 [00:00<00:00, 144.03it/s] 32%|███▏      | 32/101 [00:00<00:00, 151.42it/s] 48%|████▊     | 48/101 [00:00<00:00, 145.63it/s] 63%|██████▎   | 64/101 [00:00<00:00, 150.52it/s] 79%|███████▉  | 80/101 [00:00<00:00, 128.36it/s] 93%|█████████▎| 94/101 [00:00<00:00, 115.74it/s]100%|██████████| 101/101 [00:00<00:00, 127.91it/s]
