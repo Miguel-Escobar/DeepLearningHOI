@@ -1,4 +1,6 @@
-# Implementation of Continual Backpropagation
+# The following is the original README.md file from the Loss of Plasticity in Deep Continual Learning repo:
+
+## Implementation of Continual Backpropagation
 This directory contains different implementations of continual backpropagation. The results in the paper for feed-forward, convolutional, and residual networks in the paper are generated using `cbp.py,` 
 `convCBP.py,` `res_gnt.py` respectively. 
 
