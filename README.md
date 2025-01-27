@@ -1,4 +1,4 @@
-# High Order Interactions in Deep Continual Learning
+# Higher Order Interactions in Deep Continual Learning
 
 This repo centains code for a reserch project started at the LACONEU school of Computational Neuroscience. It **heavily** utilizes code and ideas from the the paper [Loss of Plasticity in Deep Continual Learning](https://doi.org/10.1038/s41586-024-07711-7) and it's associated [github repo](https://github.com/shibhansh/loss-of-plasticity/tree/main).
 
