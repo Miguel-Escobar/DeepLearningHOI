@@ -2,7 +2,7 @@
 
 This repo centains code for a reserch project started at the LACONEU school of Computational Neuroscience. It **heavily** utilizes code and ideas from the the paper [Loss of Plasticity in Deep Continual Learning](https://doi.org/10.1038/s41586-024-07711-7) and it's associated [github repo](https://github.com/shibhansh/loss-of-plasticity/tree/main).
 
-## A brief geal statement of the project:
+## A brief goal statement of the project:
 
 The aim is to investigate whether higher order information metrics, such as O-info, TC, DTC, etc..., give us some insight into what happens to a continously trained network that makes it be less plastic over training time. Based on what we see we can choose whether to leave it at that or go further.
 
