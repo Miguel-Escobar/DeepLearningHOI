@@ -161,3 +161,13 @@ cython_debug/
 
 lop/slowly_changing_regression/data/
 experiments/data/
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
