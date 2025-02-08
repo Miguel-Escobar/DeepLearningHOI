@@ -1,8 +1,8 @@
-# fix horrible
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
+# # fix horrible
+# from pathlib import Path
+# import sys
+# path_root = Path(__file__).parents[2]
+# sys.path.append(str(path_root))
 
 import sys
 import json
@@ -10,7 +10,7 @@ import torch
 import pickle
 import argparse
 from tqdm import tqdm
-from lop.nets.fix_ltu_net import FixLTUNet
+from nets.fix_ltu_net import FixLTUNet
 
 
 def generate_problem_data(

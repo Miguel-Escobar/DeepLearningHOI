@@ -1,18 +1,18 @@
-# fix horrible
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
+# # fix horrible
+# from pathlib import Path
+# import sys
+# path_root = Path(__file__).parents[2]
+# sys.path.append(str(path_root))
 
 import sys
 import json
 import pickle
 import argparse
-from lop.nets.ffnn import FFNN
-from lop.nets.linear import MyLinear
-from lop.algos.bp import Backprop
-from lop.algos.cbp import ContinualBackprop
-from lop.utils.miscellaneous import *
+from nets.ffnn import FFNN
+from nets.linear import MyLinear
+from dl_hoi.algos.bp import Backprop
+from dl_hoi.algos.cbp import ContinualBackprop
+from dl_hoi.utils.miscellaneous import *
 
 def expr(params: dict):
     agent_type = params['agent']

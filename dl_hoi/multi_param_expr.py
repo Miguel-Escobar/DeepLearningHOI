@@ -1,15 +1,15 @@
-# fix horrible
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
+# # fix horrible
+# from pathlib import Path
+# import sys
+# path_root = Path(__file__).parents[2]
+# sys.path.append(str(path_root))
 
 import sys
 import json
 import copy
 import argparse
 import subprocess
-from lop.utils.miscellaneous import *
+from utils.miscellaneous import *
 
 debug = False
 

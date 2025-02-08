@@ -2,7 +2,7 @@ import sys
 import torch
 from math import sqrt
 import torch.nn.functional as F
-from lop.utils.AdamGnT import AdamGnT
+from utils.AdamGnT import AdamGnT
 
 
 class GnT(object):
