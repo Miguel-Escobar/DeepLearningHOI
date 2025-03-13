@@ -33,8 +33,11 @@ def generate_problem_data(
     )
 
     num_flips = int(num_data_points/flip_after) + 1
+
     num_data_points = num_flips * flip_after
+
     flipping_bits = torch.randint(2, size=(num_flips, num_flipping_bits), dtype=torch.float32)
+
     if num_flipping_bits > 0:
         if flip_one:
             for i in range(1, num_flips):
@@ -74,12 +77,6 @@ def main(arguments):
     with open(cfg_file, 'r') as f:
         params = json.load(f)
 
-    if 'target_net_file' not in params.keys():
-        params['target_net_file'] = None
-    elif params['target_net_file'] == '':
-        params['target_net_file'] = None
-    if 'add_noise' not in params.keys():
-        params['add_noise'] = True
     if 'flip_one' not in params.keys():
         params['flip_one'] = False
 

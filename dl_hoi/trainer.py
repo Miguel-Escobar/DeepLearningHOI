@@ -18,33 +18,11 @@ def expr(params: dict):
     agent_type = params['agent']
     env_file = params['env_file']
     num_data_points = int(params['num_data_points'])
-    to_log = False
-    to_log_grad = False
-    to_log_activation = False
-    to_log_params = False
-    beta_1 = 0.9
-    beta_2 = 0.999
-    weight_decay = 0.0
-    accumulate = False
-    perturb_scale = 0
-    if 'to_log' in params.keys():
-        to_log = params['to_log']
-    if 'to_log_grad' in params.keys():
-        to_log_grad = params['to_log_grad']
-    if 'to_log_activation' in params.keys():
-        to_log_activation = params['to_log_activation']
-    if 'to_log_params' in params.keys():
-        to_log_params = params['to_log_params']
-    if 'beta_1' in params.keys():
-        beta_1 = params['beta_1']
-    if 'beta_2' in params.keys():
-        beta_2 = params['beta_2']
-    if 'weight_decay' in params.keys():
-        weight_decay = params['weight_decay']
-    if 'accumulate' in params.keys():
-        accumulate = params['accumulate']
-    if 'perturb_scale' in params.keys():
-        perturb_scale = params['perturb_scale']
+    beta_1 = params['beta_1']
+    beta_2 = params['beta_2']
+    weight_decay = params['weight_decay']
+    accumulate = params['accumulate']
+    perturb_scale = params['perturb_scale']
 
     num_inputs = params['num_inputs']
     num_features = params['num_features']
@@ -53,15 +31,13 @@ def expr(params: dict):
     opt = params['opt']
     replacement_rate = params["replacement_rate"]
     decay_rate = params["decay_rate"]
-    mt = 10
     util_type='adaptable_contribution'
     init = 'kaiming'
-    if "mt" in params.keys():
-        mt = params["mt"]
-    if "util_type" in params.keys():
-        util_type = params["util_type"]
-    if "init" in params.keys():
-        init = params["init"]
+    mt = params["mt"]
+    util_type = params["util_type"]
+    init = params["init"]
+
+    device = params["device"]
 
     if agent_type == 'linear':
         net = MyLinear(
@@ -84,15 +60,18 @@ def expr(params: dict):
             weight_decay=weight_decay,
             to_perturb=(perturb_scale > 0),
             perturb_scale=perturb_scale,
+            device=device,
         )
     elif agent_type == 'cbp':
         learner = ContinualBackprop(
             net=net,
             step_size=step_size,
             opt=opt,
+            beta_1=beta_1,
+            beta_2=beta_2,
             replacement_rate=replacement_rate,
             decay_rate=decay_rate,
-            device='cpu',
+            device=device,
             maturity_threshold=mt,
             util_type=util_type,
             init=init,
@@ -103,40 +82,15 @@ def expr(params: dict):
         inputs, outputs, _ = pickle.load(f)
 
     errs = torch.zeros((num_data_points), dtype=torch.float)
-    if to_log: weight_mag = torch.zeros((num_data_points, 2), dtype=torch.float)
-    if to_log_grad: grad_mag = torch.zeros((num_data_points, 2), dtype=torch.float)
-    if to_log_activation: activation = torch.zeros((num_data_points, ), dtype=torch.float)
-    if to_log_params: params, save_every = ([], params["save_every"]) # quiero que sea una lista para no calentarme demasiado la cabeza.
 
     for i in tqdm(range(num_data_points)):
         x, y = inputs[i: i+1], outputs[i: i+1]
         err = learner.learn(x=x, target=y)
-        if to_log:
-            weight_mag[i][0] = learner.net.layers[0].weight.data.abs().mean()
-            weight_mag[i][1] = learner.net.layers[-1].weight.data.abs().mean()
-        if to_log_grad:
-            grad_mag[i][0] = learner.net.layers[0].weight.grad.data.abs().mean()
-            grad_mag[i][1] = learner.net.layers[-1].weight.grad.data.abs().mean()
-        if to_log_activation:
-            if hidden_activation == 'relu':
-                activation[i] = (learner.previous_features[0] == 0).float().mean()
-            if hidden_activation == 'tanh':
-                activation[i] = (learner.previous_features[0].abs() > 0.9).float().mean()
-        if to_log_params and i % save_every == 1:
-            params.append((learner.net.layers[0].weight.clone().detach(), learner.net.layers[0].bias.clone().detach(), learner.net.layers[2].weight.clone().detach()))
         errs[i] = err
 
     data_to_save = {
         'errs': errs.numpy()
     }
-    if to_log:
-        data_to_save['weight_mag'] = weight_mag.numpy()
-    if to_log_grad:
-        data_to_save['grad_mag'] = grad_mag.numpy()
-    if to_log_activation:
-        data_to_save['activation'] = activation.numpy()
-    if to_log_params:
-        data_to_save['params'] = params
     return data_to_save
 
 
