@@ -10,7 +10,7 @@ import torch
 import pickle
 import argparse
 from tqdm import tqdm
-from nets.fix_ltu_net import FixLTUNet
+from .nets.fix_ltu_net import FixLTUNet
 
 
 def generate_problem_data(
@@ -63,6 +63,8 @@ def generate_problem_data(
     data = X, Y, target_network
     with open(data_file, 'wb+') as f:
         pickle.dump(data, f)
+    
+    print("Succesfully generated data file stored in: " + data_file)
 
 
 def main(arguments):

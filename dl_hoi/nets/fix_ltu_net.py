@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from lop.utils.ltu import LTU
+from ..utils.ltu import LTU
 
 
 class FixLTUNet(nn.Module):

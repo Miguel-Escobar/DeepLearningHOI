@@ -6,7 +6,7 @@ class ThresholdFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, inp, tau):
         output = torch.where(inp > tau, torch.ones(tau.size()[0]), torch.zeros(tau.size()[0]))
-        ctx.save_for_backward(inp, torch.tensor(tau))
+        ctx.save_for_backward(inp, tau.clone().detach()) # this used to be torch.tensor(tau)
         return output
 
     @staticmethod

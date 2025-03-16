@@ -8,8 +8,8 @@ import sys
 import json
 import pickle
 import argparse
-from nets.ffnn import FFNN
-from nets.linear import MyLinear
+from .nets.ffnn import FFNN
+from .nets.linear import MyLinear
 from dl_hoi.algos.bp import Backprop
 from dl_hoi.algos.cbp import ContinualBackprop
 from dl_hoi.utils.miscellaneous import *
