@@ -1,0 +1,22 @@
+{
+    "agent": "bp",
+    "env_file": "data/teacher_data/1",
+    "train_steps": 10000,
+    "beta_1": 0.9,
+    "beta_2": 0.999,
+    "weight_decay": 0,
+    "accumulate": false,
+    "perturb_scale": 0,
+    "device": "gpu",
+
+    "num_inputs": 20,
+    "num_features": 5,
+    "hidden_activation": "relu",
+    "step_size": 0.001,
+    "opt": "sgd",
+    "replacement_rate": 0.001,
+    "decay_rate": 0.9,
+    "mt": 100,
+    "util_type": "contribution",
+    "init": "kaiming"
+}

@@ -1,10 +1,6 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
-
-  # https://devenv.sh/basics/
-  env.GREET = "devenv";
-
   # https://devenv.sh/packages/
   packages = [
     pkgs.git
@@ -19,11 +15,7 @@
   languages.python.venv.requirements = ./requirements.txt;
 
   scripts.hello.exec = ''
-    echo hello from $GREET
-  '';
-
-  enterShell = ''
-    zsh
+    echo hello!
   '';
 
   # https://devenv.sh/tasks/

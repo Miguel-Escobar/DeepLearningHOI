@@ -17,7 +17,7 @@ from dl_hoi.utils.miscellaneous import *
 def expr(params: dict):
     agent_type = params['agent']
     env_file = params['env_file']
-    num_data_points = int(params['num_data_points'])
+    num_data_points = int(params['train_steps'])
     beta_1 = params['beta_1']
     beta_2 = params['beta_2']
     weight_decay = params['weight_decay']
